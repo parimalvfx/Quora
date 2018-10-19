@@ -64,7 +64,7 @@
                         <library>spring-boot</library>
                         <generateApis>false</generateApis>
                         <generateModels>true</generateModels>
-                        <modelPackage>com.upgrad.quora.api.model</modelPackage>
+                        <modelPackage>com.upgrad.quora.api._model</modelPackage>
                         <configOptions>
                             <java8>true</java8>
                             <sourceFolder>.</sourceFolder>
