@@ -1,9 +1,10 @@
 package com.upgrad.quora.api.controller;
 
-import com.upgrad.quora.api._model.SignupUserRequest;
-import com.upgrad.quora.api._model.SignupUserResponse;
+import com.upgrad.quora.api.model.SignupUserRequest;
+import com.upgrad.quora.api.model.SignupUserResponse;
 import com.upgrad.quora.service.business.UserBusinessService;
 import com.upgrad.quora.service.entity.UserEntity;
+import com.upgrad.quora.service.exception.SignUpRestrictedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,8 +22,17 @@ public class UserController {
     @Autowired
     private UserBusinessService userBusinessService;
 
+    /**
+     * This api endpoint is used to register a new user
+     *
+     * @param signupUserRequest user details for registration in SignupUserRequest model
+     *
+     * @return JSON response with user uuid and message
+     *
+     * @throws SignUpRestrictedException if validation for user details conflicts
+     */
     @RequestMapping(method = RequestMethod.POST, path = "/user/signup", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<SignupUserResponse> signup(final SignupUserRequest signupUserRequest) {
+    public ResponseEntity<SignupUserResponse> signup(final SignupUserRequest signupUserRequest) throws SignUpRestrictedException {
 
         final UserEntity userEntity = new UserEntity();
 
@@ -43,5 +53,4 @@ public class UserController {
         SignupUserResponse userResponse = new SignupUserResponse().id(createdUserEntity.getUuid()).status("USER SUCCESSFULLY REGISTERED");
         return new ResponseEntity<SignupUserResponse>(userResponse, HttpStatus.CREATED);
     }
-
 }

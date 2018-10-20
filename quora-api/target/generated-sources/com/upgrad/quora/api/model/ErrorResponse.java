@@ -1,4 +1,4 @@
-package com.upgrad.quora.api._model;
+package com.upgrad.quora.api.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,7 +13,7 @@ import javax.validation.constraints.*;
  * ErrorResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-10-20T00:38:18.567+05:30")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-10-20T18:36:32.592+05:30")
 
 public class ErrorResponse   {
   @JsonProperty("code")
