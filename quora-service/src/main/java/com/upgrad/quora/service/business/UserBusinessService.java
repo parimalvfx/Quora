@@ -1,8 +1,11 @@
 package com.upgrad.quora.service.business;
 
+import com.upgrad.quora.service.entity.UserAuthEntity;
 import com.upgrad.quora.service.entity.UserEntity;
 import com.upgrad.quora.service.dao.UserDao;
 import com.upgrad.quora.service.exception.SignUpRestrictedException;
+import com.upgrad.quora.service.exception.AuthorizationFailedException;
+import com.upgrad.quora.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -13,7 +16,13 @@ public class UserBusinessService {
 
     @Autowired
     private AdminBusinessService adminBusinessService;
+
+    @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private PasswordCryptographyProvider cryptographyProvider;
+
 
     /**
      * This method helps create new user
@@ -36,10 +45,23 @@ public class UserBusinessService {
      *
      * @return UserEntity object
      *
-     * @throws
+     * @throws AuthorizationFailedException if validation for signed in user failed
+     *
+     * @throws UserNotFoundException if get details for user is not found in database
      */
-    public UserEntity getUser(final String userId){
-        return  userDao.getUser(userId);
+    public UserEntity getUser(final String userId, final String authorizationToken) throws AuthorizationFailedException, UserNotFoundException{
+
+        UserAuthEntity userAuthEntity = userDao.getUserAuthToken(authorizationToken);
+        UserEntity userEntity = userDao.getUser(userId);
+
+        if(userAuthEntity == null){
+            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
+        }
+
+        if(userEntity == null){
+            throw new UserNotFoundException("USR-001","User with entered uuid does not exist");
+        }
+        return  userEntity;
 
     }
 }

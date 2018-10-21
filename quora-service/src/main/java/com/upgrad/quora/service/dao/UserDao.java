@@ -1,6 +1,6 @@
 package com.upgrad.quora.service.dao;
 
-import com.upgrad.quora.service.entity.UserEntity;
+import com.upgrad.quora.service.entity.*;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -57,7 +57,7 @@ public class UserDao {
     }
 
     /**
-     * This method helps find existing user by User ID
+     * This method helps to find existing user by User ID
      *
      * @param userId the  id which will be searched in database for existing user
      *
@@ -66,6 +66,21 @@ public class UserDao {
     public UserEntity getUser(final String userId){
         try {
             return entityManager.createNamedQuery("userById", UserEntity.class).setParameter("id", userId).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
+    /**
+     * This method helps in retrieving Access Token for Signed in user
+     *
+     * @param accessToken the  accessToken which will be searched in database for existing user
+     *
+     * @return UserAuthEntity object if user with requested id exists in database
+     */
+    public UserAuthEntity getUserAuthToken(final String accessToken){
+        try {
+            return entityManager.createNamedQuery("userAuthTokenByAccessToken", UserAuthEntity.class).setParameter("accessToken", accessToken).getSingleResult();
         } catch (NoResultException nre) {
             return null;
         }
