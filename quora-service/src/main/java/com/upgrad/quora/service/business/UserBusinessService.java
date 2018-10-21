@@ -1,6 +1,7 @@
 package com.upgrad.quora.service.business;
 
 import com.upgrad.quora.service.entity.UserEntity;
+import com.upgrad.quora.service.dao.UserDao;
 import com.upgrad.quora.service.exception.SignUpRestrictedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ public class UserBusinessService {
 
     @Autowired
     private AdminBusinessService adminBusinessService;
+    private UserDao userDao;
 
     /**
      * This method helps create new user
@@ -25,5 +27,19 @@ public class UserBusinessService {
     @Transactional(propagation = Propagation.REQUIRED)
     public UserEntity signup(UserEntity userEntity) throws SignUpRestrictedException {
         return adminBusinessService.createUser(userEntity);
+    }
+
+    /**
+     * This method helps to get details of a user
+     *
+     * @param userId the UserEntity object from which user details will be retrieved
+     *
+     * @return UserEntity object
+     *
+     * @throws
+     */
+    public UserEntity getUser(final String userId){
+        return  userDao.getUser(userId);
+
     }
 }
