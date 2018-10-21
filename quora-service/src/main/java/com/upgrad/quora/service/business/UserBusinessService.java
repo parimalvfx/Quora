@@ -61,8 +61,8 @@ public class UserBusinessService {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
 
-        if(userLogoutAt == null && userAuthEntity == null){
-            throw  new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to get user details")
+        if(userLogoutAt == null){
+            throw  new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to get user details");
         }
 
         if(userEntity == null){
