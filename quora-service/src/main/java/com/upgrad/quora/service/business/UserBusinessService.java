@@ -1,10 +1,10 @@
 package com.upgrad.quora.service.business;
 
+import com.upgrad.quora.service.dao.UserDao;
 import com.upgrad.quora.service.entity.UserAuthEntity;
 import com.upgrad.quora.service.entity.UserEntity;
-import com.upgrad.quora.service.dao.UserDao;
-import com.upgrad.quora.service.exception.SignUpRestrictedException;
 import com.upgrad.quora.service.exception.AuthorizationFailedException;
+import com.upgrad.quora.service.exception.SignUpRestrictedException;
 import com.upgrad.quora.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +22,8 @@ public class UserBusinessService {
 
     @Autowired
     private PasswordCryptographyProvider cryptographyProvider;
+
+
 
 
     /**
@@ -52,10 +54,15 @@ public class UserBusinessService {
     public UserEntity getUser(final String userId, final String authorizationToken) throws AuthorizationFailedException, UserNotFoundException{
 
         UserAuthEntity userAuthEntity = userDao.getUserAuthToken(authorizationToken);
+        UserAuthEntity userLogoutAt = userDao.getLogoutAt(authorizationToken);
         UserEntity userEntity = userDao.getUser(userId);
 
         if(userAuthEntity == null){
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
+        }
+
+        if(userLogoutAt == null && userAuthEntity == null){
+            throw  new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to get user details")
         }
 
         if(userEntity == null){
