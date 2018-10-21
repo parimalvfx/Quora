@@ -64,15 +64,6 @@ public class UserController {
         return new ResponseEntity<SignupUserResponse>(userResponse, HttpStatus.CREATED);
     }
 
-    /**
-     * This api endpoint is used to signin existing user
-     *
-     * @param authorization User credentials where username:password of the String is encoded to Base64 format
-     *
-     * @return JSON response with user uuid, message and access_token in response header
-     *
-     * @throws AuthenticationFailedException if user authentication fails
-     */
     @RequestMapping(method = RequestMethod.POST, path = "/user/signin", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SigninResponse> signin(@RequestHeader("authorization") final String authorization) throws AuthenticationFailedException {
 

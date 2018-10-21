@@ -28,15 +28,6 @@ public class RestExceptionHandler {
         );
     }
 
-    /**
-     * Exception handler method for AuthenticationFailedException
-     *
-     * @param exe AuthenticationFailedException exception
-     *
-     * @param request WebRequest
-     *
-     * @return ErrorResponse returning message and HTTP status
-     */
     @ExceptionHandler(AuthenticationFailedException.class)
     public ResponseEntity<ErrorResponse> authenticationFailedException(AuthenticationFailedException exe, WebRequest request) {
         return new ResponseEntity<ErrorResponse>(

@@ -56,23 +56,11 @@ public class UserDao {
         }
     }
 
-    /**
-     * This method creates authentication token for accessing endpoints
-     *
-     * @param userAuthEntity UserAuthEntity object
-     *
-     * @return authentication token as UserAuthEntity object
-     */
     public UserAuthEntity createAuthToken(final UserAuthEntity userAuthEntity) {
         entityManager.persist(userAuthEntity);
         return userAuthEntity;
     }
 
-    /**
-     * This method helps update user details in database
-     *
-     * @param updatedUserEntity updated UserEntity object
-     */
     public void updateUser(final UserEntity updatedUserEntity) {
         entityManager.merge(updatedUserEntity);
     }
