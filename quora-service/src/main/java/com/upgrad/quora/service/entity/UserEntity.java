@@ -16,7 +16,8 @@ import java.io.Serializable;
                 @NamedQuery(name = "userByUserName", query = "select u from UserEntity u where u.userName = :userName"),
                 @NamedQuery(name = "userByEmail", query = "select u from UserEntity u where u.email = :email"),
                 @NamedQuery(name = "userById", query = "select u from UserEntity u where u.uuid = :uid"),
-                @NamedQuery(name = "deleteUserById", query="delete from UserEntity u where u.uuid = :uid")
+                @NamedQuery(name = "deleteUserById", query="delete from UserEntity u where u.uuid = :uid"),
+                @NamedQuery(name="getUserRole",query ="select role from UserEntity u where u.uuid = uid")
         }
 )
 public class UserEntity implements Serializable {
