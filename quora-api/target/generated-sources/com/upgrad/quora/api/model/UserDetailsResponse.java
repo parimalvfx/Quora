@@ -252,7 +252,5 @@ public class UserDetailsResponse   {
     }
     return o.toString().replace("\n", "\n    ");
   }
-
-
 }
 
