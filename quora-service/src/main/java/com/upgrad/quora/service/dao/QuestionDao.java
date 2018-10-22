@@ -26,4 +26,24 @@ public class QuestionDao {
             return null;
         }
     }
+
+    public QuestionEntity getQuestionByUuid(final String questionUuid) {
+        try {
+            return entityManager.createNamedQuery("questionEntityByUuid", QuestionEntity.class).setParameter("uuid", questionUuid).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
+    public QuestionEntity getQuestionById(final long questionId) {
+        try {
+            return entityManager.createNamedQuery("questionEntityById", QuestionEntity.class).setParameter("uuid", questionId).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
+    public QuestionEntity editQuestionContent(final QuestionEntity questionEntity) {
+        return entityManager.merge(questionEntity);
+    }
 }
