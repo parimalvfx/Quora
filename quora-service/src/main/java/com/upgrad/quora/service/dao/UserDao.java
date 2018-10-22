@@ -100,15 +100,5 @@ public class UserDao {
         }
     }
 
-    public boolean isAdmin(String uid){
-        try{
-            String value = entityManager.createNamedQuery("getUserRole",UserEntity.class).setParameter("uuid",uid).toString();
-            if(value == "admin"){
-                return true;
-            }
-        } catch (NoResultException nre){
-            return false;
-        }
-        return false;
-    }
+
 }
