@@ -5,6 +5,7 @@ import com.upgrad.quora.service.entity.UserAuthEntity;
 import com.upgrad.quora.service.entity.UserEntity;
 import com.upgrad.quora.service.exception.SignOutRestrictedException;
 import com.upgrad.quora.service.exception.SignUpRestrictedException;
+import com.upgrad.quora.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -71,5 +72,16 @@ public class AdminBusinessService {
         userAuthEntity.setLogoutAt(now);
 
         return userAuthEntity.getUser();
+    }
+
+    public void deleteUser(final String uuid) throws UserNotFoundException {
+
+        //UserEntity existingUser = userDao.getUserByUserName(userEntity.getUserName());
+        if (userDao.getUserById(uuid)==null) {
+            throw new UserNotFoundException("USR-001", "User with entered uuid to be deleted does not exist");
+        }
+
+        userDao.deleteUser(uuid);
+
     }
 }
