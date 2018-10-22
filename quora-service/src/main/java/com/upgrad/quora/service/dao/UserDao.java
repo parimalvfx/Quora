@@ -73,6 +73,7 @@ public class UserDao {
 
     }
 
+
     public UserEntity deleteUser(String uuid) {
 
         try{
@@ -97,5 +98,17 @@ public class UserDao {
         } catch (NoResultException nre) {
             return null;
         }
+    }
+
+    public boolean isAdmin(String uuid){
+        try{
+            String value = entityManager.createNamedQuery("deleteUserById",UserEntity.class).setParameter("uuid",uuid).toString();
+            if(value == "admin"){
+                return true;
+            }
+        } catch (NoResultException nre){
+            return false;
+        }
+        return false;
     }
 }
