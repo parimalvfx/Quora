@@ -93,7 +93,7 @@ public class AdminBusinessService {
         }
 
 
-        if(userDao.isAdmin(uuid)){
+        if(userAuthEntity.getUser().getRole().equals("nonadmin")){
             throw new AuthorizationFailedException("ATHR-003", "Unauthorized Access, Entered user is not an admin");
         }
 
