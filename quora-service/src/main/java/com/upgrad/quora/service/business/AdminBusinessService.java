@@ -79,6 +79,10 @@ public class AdminBusinessService {
 
         //UserEntity existingUser = userDao.getUserByUserName(userEntity.getUserName());
 
+        if (userDao.getUserById(uuid)==null) {
+            throw new UserNotFoundException("USR-001", "User with entered uuid to be deleted does not exist");
+        }
+
         UserAuthEntity userAuthEntity = userDao.getUserAuthToken(authorizationToken);
         if (userAuthEntity == null) {
             throw new AuthorizationFailedException("ATHR-001", "'User has not signed in");
@@ -88,8 +92,9 @@ public class AdminBusinessService {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out");
         }
 
-        if (userDao.getUserById(uuid)==null) {
-            throw new UserNotFoundException("USR-001", "User with entered uuid to be deleted does not exist");
+
+        if(userDao.isAdmin(uuid)){
+            throw new AuthorizationFailedException("ATHR-003", "Unauthorized Access, Entered user is not an admin");
         }
 
         userDao.deleteUser(uuid);
