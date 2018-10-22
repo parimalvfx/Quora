@@ -19,14 +19,6 @@ public class QuestionDao {
         return questionEntity;
     }
 
-    public UserAuthEntity getUserAuthToken(final String accessToken) {
-        try {
-            return entityManager.createNamedQuery("userAuthTokenByAccessToken", UserAuthEntity.class).setParameter("accessToken", accessToken).getSingleResult();
-        } catch (NoResultException nre) {
-            return null;
-        }
-    }
-
     public QuestionEntity getQuestionByUuid(final String questionUuid) {
         try {
             return entityManager.createNamedQuery("questionEntityByUuid", QuestionEntity.class).setParameter("uuid", questionUuid).getSingleResult();
