@@ -5,6 +5,7 @@ import com.upgrad.quora.api.model.QuestionResponse;
 import com.upgrad.quora.service.business.QuestionBusinessService;
 import com.upgrad.quora.service.entity.QuestionEntity;
 import com.upgrad.quora.service.exception.AuthorizationFailedException;
+import com.upgrad.quora.service.exception.InvalidQuestionException;
 import com.upgrad.quora.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,4 +51,15 @@ public class QuestionController {
         }
         return new ResponseEntity<List<QuestionResponse>>(allQuestionResponse,HttpStatus.FOUND);
     }
+
+    @RequestMapping("/question/delete/{questionId}")
+    public ResponseEntity<QuestionResponse> userQuestionDelete (@PathVariable("questionId") final String questionId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, InvalidQuestionException {
+
+
+        questionBusinessService.userQuestionDelete(questionId, authorization);
+
+        QuestionResponse questionResponse = new QuestionResponse().id(questionId).status("QUESTION DELETED");
+        return new ResponseEntity<QuestionResponse>(questionResponse, HttpStatus.NO_CONTENT);
+    }
+
 }
