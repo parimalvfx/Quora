@@ -13,6 +13,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/")
 public class AnswerController {
@@ -37,5 +40,20 @@ public class AnswerController {
         answerBusinessService.deleteAnswer(questionId, authorization);
         AnswerResponse answerResponse = new AnswerResponse().id(questionId).status("ANSWER DELETED");
         return new ResponseEntity<AnswerResponse>(answerResponse, HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping("/all/{questionId}")
+    public ResponseEntity<List<AnswerResponse>> getAllAnswersToQuestion (@PathVariable("questionId") final String questionId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, InvalidQuestionException {
+
+
+        List<AnswerEntity> allAnswers = answerBusinessService.getAllAnswersToQuestion(questionId, authorization);
+
+        List<AnswerResponse> allAnswersResponse = new ArrayList<AnswerResponse>();
+
+        for(int i=0;i<allAnswers.size();i++){
+            AnswerResponse ar = new AnswerResponse().id(allAnswers.get(i).getUuid()+allAnswers.get(i).getAnswer()).status("ANSWER TO QUESTION");
+            allAnswersResponse.add(ar);
+        }
+        return new ResponseEntity<List<AnswerResponse>>(allAnswersResponse,HttpStatus.FOUND);
     }
 }
