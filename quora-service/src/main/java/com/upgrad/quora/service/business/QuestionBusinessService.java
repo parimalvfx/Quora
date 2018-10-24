@@ -8,7 +8,6 @@ import com.upgrad.quora.service.entity.UserEntity;
 import com.upgrad.quora.service.exception.AuthorizationFailedException;
 import com.upgrad.quora.service.exception.InvalidQuestionException;
 import com.upgrad.quora.service.exception.UserNotFoundException;
-import com.upgrad.quora.service.exception.InvalidQuestionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -21,9 +20,6 @@ public class QuestionBusinessService {
 
     @Autowired
     private QuestionDao questionDao;
-    @Autowired
-    private UserDao userDao;
-
     @Autowired
     private UserDao userDao;
 
