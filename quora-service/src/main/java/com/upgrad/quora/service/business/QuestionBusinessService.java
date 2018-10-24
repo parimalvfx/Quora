@@ -49,7 +49,7 @@ public class QuestionBusinessService {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to edit the question");
         }
 
-        // Validate if requested question exists or not
+        // Validate if requested question exist or not
         QuestionEntity existingQuestionEntity = questionDao.getQuestionByUuid(questionEntity.getUuid());
         if (existingQuestionEntity == null) {
             throw new InvalidQuestionException("QUES-001", "Entered question uuid does not exist");
@@ -66,6 +66,6 @@ public class QuestionBusinessService {
         questionEntity.setUser(existingQuestionEntity.getUser());
         questionEntity.setDate(existingQuestionEntity.getDate());
 
-        return questionDao.editQuestionContent(existingQuestionEntity);
+        return questionDao.editQuestionContent(questionEntity);
     }
 }
