@@ -31,6 +31,18 @@ public class QuestionDao {
         }
     }
 
+    public QuestionEntity getQuestionById(final long questionId) {
+        try {
+            return entityManager.createNamedQuery("questionEntityById", QuestionEntity.class).setParameter("uuid", questionId).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
+    public QuestionEntity editQuestionContent(final QuestionEntity questionEntity) {
+        return entityManager.merge(questionEntity);
+    }
+
     public List<QuestionEntity> getAllQuestionsByUser(final String uuid){
         try {
             return entityManager.createNamedQuery("getAllQuestionsByUser", QuestionEntity.class).setParameter("uuid", uuid).getResultList();
