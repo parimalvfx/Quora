@@ -1,6 +1,8 @@
 package com.upgrad.quora.service.entity;
 
 import org.apache.commons.lang3.builder.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,7 +14,10 @@ import java.io.Serializable;
 @NamedQueries(
         {
                 @NamedQuery(name = "userByUserName", query = "select u from UserEntity u where u.userName = :userName"),
-                @NamedQuery(name = "userByEmail", query = "select u from UserEntity u where u.email = :email")
+                @NamedQuery(name = "userByEmail", query = "select u from UserEntity u where u.email = :email"),
+                @NamedQuery(name = "userByUuid", query = "select u from UserEntity u where u.uuid = :uuid"),
+                @NamedQuery(name = "deleteUserByUuid", query="delete from UserEntity u where u.uuid = :uuid"),
+
         }
 )
 public class UserEntity implements Serializable {
@@ -24,6 +29,7 @@ public class UserEntity implements Serializable {
 
     @Column(name = "uuid")
     @NotNull
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @Size(max = 200)
     private String uuid;
 

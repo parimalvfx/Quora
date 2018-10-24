@@ -55,6 +55,33 @@ public class UserDao {
             return null;
         }
     }
+    /**
+     * This method helps find existing user by uuid
+     *
+     * @param uuid the user id which will be searched in database for existing user
+     *
+     * @return UserEntity object if user with requested uuid exists in database
+     */
+    public UserEntity getUserByUuid(final String uid){
+
+        try{
+            return entityManager.createNamedQuery("userByUuid",UserEntity.class).setParameter("uuid",uid).getSingleResult();
+        } catch (NoResultException nre){
+            return null;
+        }
+
+
+    }
+
+
+    public UserEntity deleteUser(String uuid) {
+
+        try{
+            return entityManager.createNamedQuery("deleteUserByUuid",UserEntity.class).setParameter("uuid",uuid).getSingleResult();
+        } catch (NoResultException nre){
+            return null;
+        }
+    }
 
     public UserAuthEntity createAuthToken(final UserAuthEntity userAuthEntity) {
         entityManager.persist(userAuthEntity);
@@ -72,4 +99,6 @@ public class UserDao {
             return null;
         }
     }
+
+
 }
