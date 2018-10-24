@@ -56,16 +56,16 @@ public class UserDao {
         }
     }
     /**
-     * This method helps find existing user by email id
+     * This method helps find existing user by uuid
      *
-     * @param uid the user id which will be searched in database for existing user
+     * @param uuid the user id which will be searched in database for existing user
      *
-     * @return UserEntity object if user with requested email id exists in database
+     * @return UserEntity object if user with requested uuid exists in database
      */
-    public UserEntity getUserById(String uid){
+    public UserEntity getUserByUuid(final String uid){
 
         try{
-            return entityManager.createNamedQuery("userById",UserEntity.class).setParameter("uuid",uid).getSingleResult();
+            return entityManager.createNamedQuery("userByUuid",UserEntity.class).setParameter("uuid",uid).getSingleResult();
         } catch (NoResultException nre){
             return null;
         }
@@ -77,7 +77,7 @@ public class UserDao {
     public UserEntity deleteUser(String uuid) {
 
         try{
-            return entityManager.createNamedQuery("deleteUserById",UserEntity.class).setParameter("uuid",uuid).getSingleResult();
+            return entityManager.createNamedQuery("deleteUserByUuid",UserEntity.class).setParameter("uuid",uuid).getSingleResult();
         } catch (NoResultException nre){
             return null;
         }
