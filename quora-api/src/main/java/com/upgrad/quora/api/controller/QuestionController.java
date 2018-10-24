@@ -5,16 +5,16 @@ import com.upgrad.quora.api.model.QuestionResponse;
 import com.upgrad.quora.service.business.QuestionBusinessService;
 import com.upgrad.quora.service.entity.QuestionEntity;
 import com.upgrad.quora.service.exception.AuthorizationFailedException;
+import com.upgrad.quora.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -34,5 +34,20 @@ public class QuestionController {
         final QuestionEntity createdQuestionEntity = questionBusinessService.createQuestion(questionEntity, authorization);
         QuestionResponse questionResponse = new QuestionResponse().id(createdQuestionEntity.getUuid()).status("QUESTION CREATED");
         return new ResponseEntity<QuestionResponse>(questionResponse, HttpStatus.CREATED);
+    }
+
+    @RequestMapping("/all/{userId}")
+    public ResponseEntity<List<QuestionResponse>> getAllQuestionsByUser (@PathVariable("userId") final String userId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, UserNotFoundException {
+
+
+        List<QuestionEntity> allQuestions = questionBusinessService.getAllQuestionsByUser(userId, authorization);
+
+        List<QuestionResponse> allQuestionResponse = new ArrayList<QuestionResponse>();
+
+        for(int i=0;i<allQuestions.size();i++){
+            QuestionResponse qr = new QuestionResponse().id(allQuestions.get(i).getUuid()+allQuestions.get(i).getContent()).status("QUESTION BY USER");
+            allQuestionResponse.add(qr);
+        }
+        return new ResponseEntity<List<QuestionResponse>>(allQuestionResponse,HttpStatus.FOUND);
     }
 }
