@@ -1,5 +1,6 @@
 package com.upgrad.quora.api.controller;
 
+import com.upgrad.quora.api.model.AnswerDeleteResponse;
 import com.upgrad.quora.api.model.AnswerRequest;
 import com.upgrad.quora.api.model.AnswerResponse;
 import com.upgrad.quora.service.business.AnswerBusinessService;
@@ -33,13 +34,13 @@ public class AnswerController {
         return new ResponseEntity<AnswerResponse>(answerResponse, HttpStatus.CREATED);
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/answer/delete/{answerId}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<AnswerResponse> deleteAnswer(@PathVariable("questionId") final String questionId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, AnswerNotFoundException {
+    @RequestMapping(method = RequestMethod.DELETE, path = "/answer/delete/{answerId}")
+    public ResponseEntity<AnswerDeleteResponse> deleteAnswer(@PathVariable("answerId") final String answerId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, AnswerNotFoundException {
 
 
-        answerBusinessService.deleteAnswer(questionId, authorization);
-        AnswerResponse answerResponse = new AnswerResponse().id(questionId).status("ANSWER DELETED");
-        return new ResponseEntity<AnswerResponse>(answerResponse, HttpStatus.NO_CONTENT);
+        answerBusinessService.deleteAnswer(answerId, authorization);
+        AnswerDeleteResponse answerDeleteResponse = new AnswerDeleteResponse().id(answerId).status("ANSWER DELETED");
+        return new ResponseEntity<AnswerDeleteResponse>(answerDeleteResponse, HttpStatus.NO_CONTENT);
     }
 
     @RequestMapping("/all/{questionId}")

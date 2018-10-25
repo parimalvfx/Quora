@@ -9,8 +9,8 @@ import java.time.ZonedDateTime;
 @Table(name = "answer")
 @NamedQueries(
         {
-                @NamedQuery(name = "answerEntityByQuestionId", query = "select i from QuestionEntity i where i.question_id = :uuid"),
-                @NamedQuery(name = "answerEntityById", query = "select i from QuestionEntity i where i.id = :id")
+                @NamedQuery(name = "answerEntityByQuestionId", query = "select i from AnswerEntity i where i.question_id = :uuid"),
+                @NamedQuery(name = "answerEntityById", query = "select i from AnswerEntity i where i.id = :id")
         }
 )
 public class AnswerEntity {

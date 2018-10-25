@@ -51,7 +51,8 @@ public class AnswerBusinessService {
         return answerDao.createAnswer(answerEntity);
     }
 
-    public void deleteAnswer(final String uuid, final String authorization) throws AuthorizationFailedException, AnswerNotFoundException {
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteAnswer(final String id, final String authorization) throws AuthorizationFailedException, AnswerNotFoundException {
 
         UserAuthEntity userAuthEntity = userDao.getUserAuthToken(authorization);
         if (userAuthEntity == null) {
@@ -61,15 +62,15 @@ public class AnswerBusinessService {
         if (userAuthEntity.getLogoutAt() != null) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out");
         }
-        if(userAuthEntity.getUser().getRole().equals("nonadmin") || !userAuthEntity.getUser().equals(answerDao.getAnswerByUuid(uuid).getUser())){
+        if(userAuthEntity.getUser().getRole().equals("nonadmin") || !userAuthEntity.getUser().equals(answerDao.getAnswerByUuid(id).getUser())){
             throw new AuthorizationFailedException("ATHR-003", "Only the answer owner or admin can delete the answer");
 
         }
-        if (answerDao.getAnswerByUuid(uuid)==null) {
+        if (answerDao.getAnswerByUuid(id)==null) {
             throw new AnswerNotFoundException("AND-001","Entered answer uuid does not exist.");
         }
 
-        answerDao.userQuestionDelete(uuid);
+        answerDao.userQuestionDelete(id);
     }
 
     public List<AnswerEntity> getAllAnswersToQuestion(final String uuid, final String authorization) throws AuthorizationFailedException, InvalidQuestionException {
