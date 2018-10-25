@@ -1,5 +1,7 @@
 package com.upgrad.quora.api.controller;
 
+import com.upgrad.quora.api.model.AnswerDeleteResponse;
+import com.upgrad.quora.api.model.AnswerDetailsResponse;
 import com.upgrad.quora.api.model.AnswerRequest;
 import com.upgrad.quora.api.model.AnswerResponse;
 import com.upgrad.quora.service.business.AnswerBusinessService;
@@ -34,26 +36,30 @@ public class AnswerController {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/answer/delete/{answerId}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<AnswerResponse> deleteAnswer(@PathVariable("questionId") final String questionId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, AnswerNotFoundException {
+    public ResponseEntity<AnswerDeleteResponse> deleteAnswer(@PathVariable("questionId") final String questionId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, AnswerNotFoundException {
 
 
         answerBusinessService.deleteAnswer(questionId, authorization);
-        AnswerResponse answerResponse = new AnswerResponse().id(questionId).status("ANSWER DELETED");
-        return new ResponseEntity<AnswerResponse>(answerResponse, HttpStatus.NO_CONTENT);
+
+        AnswerDeleteResponse answerDeleteResponse = new AnswerDeleteResponse().id(questionId).status("ANSWER DELETED");
+
+        return new ResponseEntity<AnswerDeleteResponse>(answerDeleteResponse, HttpStatus.NO_CONTENT);
     }
 
-    @RequestMapping("/all/{questionId}")
-    public ResponseEntity<List<AnswerResponse>> getAllAnswersToQuestion (@PathVariable("questionId") final String questionId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, InvalidQuestionException {
+    @RequestMapping(method = RequestMethod.GET,path="/all/{questionId}")
+    public ResponseEntity<List<AnswerDetailsResponse>> getAllAnswersToQuestion (@PathVariable("questionId") final String questionId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, InvalidQuestionException {
 
 
         List<AnswerEntity> allAnswers = answerBusinessService.getAllAnswersToQuestion(questionId, authorization);
 
-        List<AnswerResponse> allAnswersResponse = new ArrayList<AnswerResponse>();
+        List<AnswerDetailsResponse> allAnswersResponse = new ArrayList<AnswerDetailsResponse>();
+
+
 
         for(int i=0;i<allAnswers.size();i++){
-            AnswerResponse ar = new AnswerResponse().id(allAnswers.get(i).getUuid()+allAnswers.get(i).getAnswer()).status("ANSWER TO QUESTION");
-            allAnswersResponse.add(ar);
+            AnswerDetailsResponse adr = new AnswerDetailsResponse().answerContent(allAnswers.get(i).getAnswer()).id(allAnswers.get(i).getUuid());
+            allAnswersResponse.add(adr);
         }
-        return new ResponseEntity<List<AnswerResponse>>(allAnswersResponse,HttpStatus.FOUND);
+        return new ResponseEntity<List<AnswerDetailsResponse>>(allAnswersResponse,HttpStatus.FOUND);
     }
 }

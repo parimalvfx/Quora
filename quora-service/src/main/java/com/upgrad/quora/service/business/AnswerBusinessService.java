@@ -72,6 +72,7 @@ public class AnswerBusinessService {
         answerDao.userQuestionDelete(uuid);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public List<AnswerEntity> getAllAnswersToQuestion(final String uuid, final String authorization) throws AuthorizationFailedException, InvalidQuestionException {
         UserAuthEntity userAuthEntity = questionDao.getUserAuthToken(authorization);
         if (userAuthEntity == null) {

@@ -23,23 +23,23 @@ public class AnswerDao {
         return answerEntity;
     }
 
-    public AnswerEntity getAnswerByUuid(final String uuid) {
+    public AnswerEntity getAnswerByUuid(final String id) {
         try {
-            return entityManager.createNamedQuery("questionEntityByUuid", AnswerEntity.class).setParameter("uuid",uuid).getSingleResult();
+            return entityManager.createNamedQuery("questionEntityByUuid", AnswerEntity.class).setParameter("uuid",id).getSingleResult();
         } catch (NoResultException nre) {
             return null;
         }
     }
 
-    public void userQuestionDelete(String uuid) {
-        answerEntity = getAnswerByUuid(uuid);
+    public void userQuestionDelete(final String id) {
+        answerEntity = getAnswerByUuid(id);
         entityManager.remove(answerEntity);
     }
 
 
-    public List<AnswerEntity> getAllAnswersToQuestion(String uuid) {
+    public List<AnswerEntity> getAllAnswersToQuestion(final String id) {
         try {
-            return entityManager.createNamedQuery("answerEntityByQuestionId", AnswerEntity.class).setParameter("uuid", uuid).getResultList();
+            return entityManager.createNamedQuery("answerEntityByQuestionId", AnswerEntity.class).setParameter("uuid", id).getResultList();
         } catch (NoResultException nre) {
             return null;
         }
