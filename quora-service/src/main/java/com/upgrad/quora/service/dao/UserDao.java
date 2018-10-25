@@ -101,4 +101,36 @@ public class UserDao {
     }
 
 
+
+    /**
+     * This method helps in retrieving Logout time for Signed in user
+     *
+     * @param accessToken to get the Logout time
+     *
+     * @return UserAuthEntity object if Logout time with requested id exists in database
+     */
+    public UserAuthEntity getLogoutAt(final String accessToken){
+        try {
+            return entityManager.createNamedQuery("userLogoutAt", UserAuthEntity.class).setParameter("accessToken", accessToken).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
+    /**
+     * This method helps in retrieving user using its id
+     *
+     * @param id to get the user
+     *
+     * @return UserEntity object if user with requested id exists in database
+     */
+    public UserEntity getUser(final long id){
+        try {
+            return entityManager.createNamedQuery("userById", UserEntity.class).setParameter("id", id).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
+
 }
