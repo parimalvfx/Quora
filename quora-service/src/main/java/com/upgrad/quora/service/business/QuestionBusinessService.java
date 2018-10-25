@@ -37,7 +37,7 @@ public class QuestionBusinessService {
 
     public List<QuestionEntity> getAllQuestionsByUser(final String uuid, final String authorizationToken) throws AuthorizationFailedException, UserNotFoundException{
 
-        UserAuthEntity userAuthEntity = questionDao.getUserAuthToken(authorizationToken);
+        UserAuthEntity userAuthEntity = userDao.getUserAuthToken(authorizationToken);
         if (userAuthEntity == null) {
             throw new AuthorizationFailedException("ATHR-001", "'User has not signed in");
         }
@@ -48,6 +48,6 @@ public class QuestionBusinessService {
             throw new UserNotFoundException("USR-001", "User with entered uuid to be deleted does not exist");
         }
 
-        return questionDao.getAllQuestionsByUser(uuid);
+        return questionDao.getAllQuestionsByUuid(uuid);
     }
 }

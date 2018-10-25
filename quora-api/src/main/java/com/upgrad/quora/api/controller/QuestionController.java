@@ -1,5 +1,6 @@
 package com.upgrad.quora.api.controller;
 
+import com.upgrad.quora.api.model.QuestionDetailsResponse;
 import com.upgrad.quora.api.model.QuestionRequest;
 import com.upgrad.quora.api.model.QuestionResponse;
 import com.upgrad.quora.service.business.QuestionBusinessService;
@@ -36,18 +37,18 @@ public class QuestionController {
         return new ResponseEntity<QuestionResponse>(questionResponse, HttpStatus.CREATED);
     }
 
-    @RequestMapping("/all/{userId}")
-    public ResponseEntity<List<QuestionResponse>> getAllQuestionsByUser (@PathVariable("userId") final String userId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, UserNotFoundException {
+    @RequestMapping(method = RequestMethod.GET, path ="/all/{userId}")
+    public ResponseEntity<List<QuestionDetailsResponse>> getAllQuestionsByUser (@PathVariable("userId") final String userId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, UserNotFoundException {
 
 
         List<QuestionEntity> allQuestions = questionBusinessService.getAllQuestionsByUser(userId, authorization);
 
-        List<QuestionResponse> allQuestionResponse = new ArrayList<QuestionResponse>();
+        List<QuestionDetailsResponse> allQuestionDetailsResponse = new ArrayList<QuestionDetailsResponse>();
 
         for(int i=0;i<allQuestions.size();i++){
-            QuestionResponse qr = new QuestionResponse().id(allQuestions.get(i).getUuid()+allQuestions.get(i).getContent()).status("QUESTION BY USER");
-            allQuestionResponse.add(qr);
+            QuestionDetailsResponse qr = new QuestionDetailsResponse().content(allQuestions.get(i).getContent()).id(allQuestions.get(i).getUuid());
+            allQuestionDetailsResponse.add(qr);
         }
-        return new ResponseEntity<List<QuestionResponse>>(allQuestionResponse,HttpStatus.FOUND);
+        return new ResponseEntity<List<QuestionDetailsResponse>>(allQuestionDetailsResponse,HttpStatus.FOUND);
     }
 }
