@@ -56,6 +56,7 @@ public class QuestionBusinessService {
         return questionDao.getAllQuestionsByUser(uuid);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public void userQuestionDelete(final String questionId, final String authorization) throws InvalidQuestionException, AuthorizationFailedException {
 
 
