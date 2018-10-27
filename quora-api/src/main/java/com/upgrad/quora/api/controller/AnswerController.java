@@ -48,19 +48,21 @@ public class AnswerController {
         return new ResponseEntity<AnswerDeleteResponse>(answerDeleteResponse, HttpStatus.NO_CONTENT);
     }
 
-    @RequestMapping(method = RequestMethod.GET,path="/all/{questionId}")
+    @RequestMapping(method = RequestMethod.GET, path = "/all/{questionId}")
     public ResponseEntity<List<AnswerDetailsResponse>> getAllAnswersToQuestion (@PathVariable("questionId") final String questionId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, InvalidQuestionException {
-
 
         List<AnswerEntity> allAnswers = answerBusinessService.getAllAnswersToQuestion(questionId, authorization);
 
         List<AnswerDetailsResponse> allAnswersResponse = new ArrayList<AnswerDetailsResponse>();
 
-
         for (int i = 0; i < allAnswers.size(); i++) {
-            AnswerDetailsResponse adr = new AnswerDetailsResponse().answerContent(allAnswers.get(i).getAnswer()).questionContent(allAnswers.get(i).getQuestion().getContent()).id(allAnswers.get(i).getUuid());
-            allAnswersResponse.add(adr);
+            AnswerDetailsResponse answerDetailsResponse = new AnswerDetailsResponse()
+                    .answerContent(allAnswers.get(i).getAnswer())
+                    .questionContent(allAnswers.get(i).getQuestion().getContent())
+                    .id(allAnswers.get(i).getUuid());
+            allAnswersResponse.add(answerDetailsResponse);
         }
+
         return new ResponseEntity<List<AnswerDetailsResponse>>(allAnswersResponse, HttpStatus.FOUND);
     }
 
