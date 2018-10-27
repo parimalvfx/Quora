@@ -47,10 +47,6 @@ public class QuestionBusinessService {
         if (userAuthEntity.getLogoutAt() != null) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to post a question");
         }
-        if(userAuthEntity.getUser().getRole().equals("nonadmin") || !userAuthEntity.getUser().equals(questionDao.getQuestionByUuid(uuid).getUser())){
-            throw new AuthorizationFailedException("ATHR-003", "Only the question owner or admin can delete the question");
-
-        }
         if (userDao.getUserByUuid(uuid)==null) {
             throw new UserNotFoundException("USR-001", "User with entered uuid to be deleted does not exist");
         }
