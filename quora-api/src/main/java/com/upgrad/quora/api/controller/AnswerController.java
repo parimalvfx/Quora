@@ -2,6 +2,8 @@ package com.upgrad.quora.api.controller;
 
 import com.upgrad.quora.api.model.AnswerDeleteResponse;
 import com.upgrad.quora.api.model.AnswerDetailsResponse;
+import com.upgrad.quora.api.model.AnswerEditRequest;
+import com.upgrad.quora.api.model.AnswerEditResponse;
 import com.upgrad.quora.api.model.AnswerRequest;
 import com.upgrad.quora.api.model.AnswerResponse;
 import com.upgrad.quora.service.business.AnswerBusinessService;
@@ -55,11 +57,21 @@ public class AnswerController {
         List<AnswerDetailsResponse> allAnswersResponse = new ArrayList<AnswerDetailsResponse>();
 
 
-
-        for(int i=0;i<allAnswers.size();i++){
+        for (int i = 0; i < allAnswers.size(); i++) {
             AnswerDetailsResponse adr = new AnswerDetailsResponse().answerContent(allAnswers.get(i).getAnswer()).questionContent(allAnswers.get(i).getQuestion().getContent()).id(allAnswers.get(i).getUuid());
             allAnswersResponse.add(adr);
         }
-        return new ResponseEntity<List<AnswerDetailsResponse>>(allAnswersResponse,HttpStatus.FOUND);
+        return new ResponseEntity<List<AnswerDetailsResponse>>(allAnswersResponse, HttpStatus.FOUND);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, path = "/answer/edit/{answerId}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<AnswerEditResponse> editAnswerContent(final AnswerEditRequest answerEditRequest, @PathVariable("answerId") final String answerId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, AnswerNotFoundException {
+        AnswerEntity answerEntity = new AnswerEntity();
+        answerEntity.setAnswer(answerEditRequest.getContent());
+        answerEntity.setUuid(answerId);
+
+        AnswerEntity updatedAnswerEntity = answerBusinessService.editAnswerContent(answerEntity, authorization);
+        AnswerEditResponse answerEditResponse = new AnswerEditResponse().id(updatedAnswerEntity.getUuid()).status("ANSWER EDITED");
+        return new ResponseEntity<AnswerEditResponse>(answerEditResponse, HttpStatus.OK);
     }
 }

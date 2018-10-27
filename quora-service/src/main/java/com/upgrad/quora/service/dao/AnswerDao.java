@@ -1,7 +1,6 @@
 package com.upgrad.quora.service.dao;
 
 import com.upgrad.quora.service.entity.AnswerEntity;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -15,27 +14,23 @@ public class AnswerDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Autowired
-    private AnswerEntity answerEntity;
-
     public AnswerEntity createAnswer(AnswerEntity answerEntity) {
         entityManager.persist(answerEntity);
         return answerEntity;
     }
 
-    public AnswerEntity getAnswerByUuid(final String id) {
+    public AnswerEntity getAnswerByUuid(final String answerUuid) {
         try {
-            return entityManager.createNamedQuery("questionEntityByUuid", AnswerEntity.class).setParameter("uuid",id).getSingleResult();
+            return entityManager.createNamedQuery("answerEntityByUuid", AnswerEntity.class).setParameter("uuid", answerUuid).getSingleResult();
         } catch (NoResultException nre) {
             return null;
         }
     }
 
     public void userQuestionDelete(final String id) {
-        answerEntity = getAnswerByUuid(id);
+        AnswerEntity answerEntity = getAnswerByUuid(id);
         entityManager.remove(answerEntity);
     }
-
 
     public List<AnswerEntity> getAllAnswersToQuestion(final String id) {
         try {
@@ -43,5 +38,9 @@ public class AnswerDao {
         } catch (NoResultException nre) {
             return null;
         }
+    }
+
+    public AnswerEntity editAnswerContent(final AnswerEntity answerEntity) {
+        return entityManager.merge(answerEntity);
     }
 }
