@@ -20,20 +20,31 @@ public class QuestionDao {
         return questionEntity;
     }
 
-    public UserAuthEntity getUserAuthToken(final String accessToken) {
+    public QuestionEntity getQuestionByUuid(final String questionUuid) {
         try {
-            return entityManager.createNamedQuery("userAuthTokenByAccessToken", UserAuthEntity.class).setParameter("accessToken", accessToken).getSingleResult();
+            return entityManager.createNamedQuery("questionEntityByUuid", QuestionEntity.class).setParameter("uuid", questionUuid).getSingleResult();
         } catch (NoResultException nre) {
             return null;
         }
     }
 
-    public List<QuestionEntity> getAllQuestionsByUuid(final String id){
+    public List<QuestionEntity> getAllQuestionsByUuid(final String uuid) {
         try {
-            return entityManager.createNamedQuery("getAllQuestionsByUuid", QuestionEntity.class).setParameter("id", id).getResultList();
+            return entityManager.createNamedQuery("getAllQuestionsByUuid", QuestionEntity.class).setParameter("uuid", uuid).getResultList();
         } catch (NoResultException nre) {
             return null;
         }
     }
 
+    public QuestionEntity getQuestionById(final long questionId) {
+        try {
+            return entityManager.createNamedQuery("questionEntityById", QuestionEntity.class).setParameter("uuid", questionId).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
+    public QuestionEntity editQuestionContent(final QuestionEntity questionEntity) {
+        return entityManager.merge(questionEntity);
+    }
 }
