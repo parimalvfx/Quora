@@ -1,7 +1,6 @@
 package com.upgrad.quora.service.dao;
 
 import com.upgrad.quora.service.entity.AnswerEntity;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -14,9 +13,6 @@ public class AnswerDao {
 
     @PersistenceContext
     private EntityManager entityManager;
-
-    @Autowired
-    private AnswerEntity answerEntity;
 
     public AnswerEntity createAnswer(AnswerEntity answerEntity) {
         entityManager.persist(answerEntity);
@@ -31,8 +27,8 @@ public class AnswerDao {
         }
     }
 
-    public void userQuestionDelete(String uuid) {
-        answerEntity = getAnswerByUuid(uuid);
+    public void userAnswerDelete(final String answerId) {
+        AnswerEntity answerEntity = getAnswerByUuid(answerId);
         entityManager.remove(answerEntity);
     }
 
