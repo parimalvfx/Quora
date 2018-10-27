@@ -57,7 +57,7 @@ public class AnswerController {
 
 
         for(int i=0;i<allAnswers.size();i++){
-            AnswerDetailsResponse adr = new AnswerDetailsResponse().answerContent(allAnswers.get(i).getAnswer()).id(allAnswers.get(i).getUuid());
+            AnswerDetailsResponse adr = new AnswerDetailsResponse().answerContent(allAnswers.get(i).getAnswer()).questionContent(allAnswers.get(i).getQuestion().getContent()).id(allAnswers.get(i).getUuid());
             allAnswersResponse.add(adr);
         }
         return new ResponseEntity<List<AnswerDetailsResponse>>(allAnswersResponse,HttpStatus.FOUND);
