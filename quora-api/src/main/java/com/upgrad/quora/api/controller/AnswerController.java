@@ -1,6 +1,8 @@
 package com.upgrad.quora.api.controller;
 
 import com.upgrad.quora.api.model.AnswerDeleteResponse;
+import com.upgrad.quora.api.model.AnswerEditRequest;
+import com.upgrad.quora.api.model.AnswerEditResponse;
 import com.upgrad.quora.api.model.AnswerRequest;
 import com.upgrad.quora.api.model.AnswerResponse;
 import com.upgrad.quora.service.business.AnswerBusinessService;
@@ -51,10 +53,21 @@ public class AnswerController {
 
         List<AnswerResponse> allAnswersResponse = new ArrayList<AnswerResponse>();
 
-        for(int i=0;i<allAnswers.size();i++){
-            AnswerResponse ar = new AnswerResponse().id(allAnswers.get(i).getUuid()+allAnswers.get(i).getAnswer()).status("ANSWER TO QUESTION");
+        for (int i = 0; i < allAnswers.size(); i++) {
+            AnswerResponse ar = new AnswerResponse().id(allAnswers.get(i).getUuid() + allAnswers.get(i).getAnswer()).status("ANSWER TO QUESTION");
             allAnswersResponse.add(ar);
         }
-        return new ResponseEntity<List<AnswerResponse>>(allAnswersResponse,HttpStatus.FOUND);
+        return new ResponseEntity<List<AnswerResponse>>(allAnswersResponse, HttpStatus.FOUND);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, path = "/answer/edit/{answerId}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<AnswerEditResponse> editAnswerContent(final AnswerEditRequest answerEditRequest, @PathVariable("answerId") final String answerId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, AnswerNotFoundException {
+        AnswerEntity answerEntity = new AnswerEntity();
+        answerEntity.setAnswer(answerEditRequest.getContent());
+        answerEntity.setUuid(answerId);
+
+        AnswerEntity updatedAnswerEntity = answerBusinessService.editAnswerContent(answerEntity, authorization);
+        AnswerEditResponse answerEditResponse = new AnswerEditResponse().id(updatedAnswerEntity.getUuid()).status("ANSWER EDITED");
+        return new ResponseEntity<AnswerEditResponse>(answerEditResponse, HttpStatus.OK);
     }
 }
