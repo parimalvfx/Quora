@@ -36,7 +36,9 @@ public class QuestionController {
         return new ResponseEntity<QuestionResponse>(questionResponse, HttpStatus.CREATED);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path ="/all/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    // NOTE: UPDATED URL AS PER UNIT TEST, PROBLEM STATEMENT URL CONTRADICTS WITH UNIT TESTS
+    // ISSUE TICKET - 59950
+    @RequestMapping(method = RequestMethod.GET, path ="/question/all/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<QuestionDetailsResponse>> getAllQuestionsByUser(@PathVariable("userId") final String userId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, UserNotFoundException {
 
         List<QuestionEntity> allQuestions = questionBusinessService.getAllQuestionsByUser(userId, authorization);
@@ -53,7 +55,7 @@ public class QuestionController {
         return new ResponseEntity<List<QuestionDetailsResponse>>(allQuestionDetailsResponse, HttpStatus.FOUND);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, path = "/question/delete/{questionId}")
+    @RequestMapping(method = RequestMethod.DELETE, path = "/question/delete/{questionId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<QuestionDeleteResponse> deleteQuestion(@PathVariable("questionId") final String questionId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, InvalidQuestionException {
 
         questionBusinessService.userQuestionDelete(questionId, authorization);
