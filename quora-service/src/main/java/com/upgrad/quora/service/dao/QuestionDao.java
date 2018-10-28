@@ -44,6 +44,11 @@ public class QuestionDao {
         }
     }
 
+    public void userQuestionDelete(final String uuid) {
+        QuestionEntity questionEntity = getQuestionByUuid(uuid);
+        entityManager.remove(questionEntity);
+    }
+
     public QuestionEntity editQuestionContent(final QuestionEntity questionEntity) {
         return entityManager.merge(questionEntity);
     }
