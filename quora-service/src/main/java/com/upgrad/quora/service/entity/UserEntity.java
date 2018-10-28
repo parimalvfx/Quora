@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
+
 @Entity
 @Table(name = "users")
 @NamedQueries(
@@ -49,13 +50,11 @@ public class UserEntity implements Serializable {
     private String email;
 
     @Column(name = "password")
-    @ToStringExclude
     @NotNull
     @Size(max = 255)
     private String password;
 
     @Column(name = "salt")
-    @ToStringExclude
     @NotNull
     @Size(max = 200)
     private String salt;
