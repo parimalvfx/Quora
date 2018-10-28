@@ -81,22 +81,29 @@ public class AnswerBusinessService {
         answerDao.userAnswerDelete(answerId);
     }
 
-    public List<AnswerEntity> getAllAnswersToQuestion(final String uuid, final String authorization) throws AuthorizationFailedException, InvalidQuestionException {
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<AnswerEntity> getAllAnswersToQuestion(final String questionId, final String authorization) throws AuthorizationFailedException, InvalidQuestionException {
         UserAuthEntity userAuthEntity = questionDao.getUserAuthToken(authorization);
+
+        // Validate if user is signed in or not
         if (userAuthEntity == null) {
-            throw new AuthorizationFailedException("ATHR-001", "'User has not signed in");
-        }
-        if (userAuthEntity.getLogoutAt() != null) {
-            throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to post a question");
+            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
 
-        if (questionDao.getQuestionByUuid(uuid) == null) {
+        // Validate if user has signed out
+        if (userAuthEntity.getLogoutAt() != null) {
+            throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to get the answers");
+        }
+
+        // Validate if requested question exist or not
+        if (questionDao.getQuestionByUuid(questionId) == null) {
             throw new InvalidQuestionException("QUES-001", "The question with entered uuid whose details are to be seen does not exist");
         }
 
-        return answerDao.getAllAnswersToQuestion(uuid);
+        return answerDao.getAllAnswersToQuestion(questionId);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public AnswerEntity editAnswerContent(final AnswerEntity answerEntity, final String authorization) throws AuthorizationFailedException, AnswerNotFoundException {
         UserAuthEntity userAuthEntity = userDao.getUserAuthToken(authorization);
 
