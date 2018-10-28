@@ -27,8 +27,8 @@ public class AnswerDao {
         }
     }
 
-    public void userQuestionDelete(final String id) {
-        AnswerEntity answerEntity = getAnswerByUuid(id);
+    public void userAnswerDelete(final String answerId) {
+        AnswerEntity answerEntity = getAnswerByUuid(answerId);
         entityManager.remove(answerEntity);
     }
 

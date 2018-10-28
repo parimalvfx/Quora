@@ -36,10 +36,6 @@ public class QuestionDao {
         }
     }
 
-    public QuestionEntity editQuestionContent(final QuestionEntity questionEntity) {
-        return entityManager.merge(questionEntity);
-    }
-
     public List<QuestionEntity> getAllQuestionsByUser(final String uuid){
         try {
             return entityManager.createNamedQuery("getAllQuestionsByUser", QuestionEntity.class).setParameter("uuid", uuid).getResultList();
@@ -54,13 +50,14 @@ public class QuestionDao {
         } catch (NoResultException nre) {
             return null;
         }
-
     }
 
     public void userQuestionDelete(final String uuid) {
-
         QuestionEntity questionEntity = getQuestionByUuid(uuid);
         entityManager.remove(questionEntity);
+    }
 
+    public QuestionEntity editQuestionContent(final QuestionEntity questionEntity) {
+        return entityManager.merge(questionEntity);
     }
 }

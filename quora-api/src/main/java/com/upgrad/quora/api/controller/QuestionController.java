@@ -1,9 +1,6 @@
 package com.upgrad.quora.api.controller;
 
-import com.upgrad.quora.api.model.QuestionEditRequest;
-import com.upgrad.quora.api.model.QuestionEditResponse;
-import com.upgrad.quora.api.model.QuestionRequest;
-import com.upgrad.quora.api.model.QuestionResponse;
+import com.upgrad.quora.api.model.*;
 import com.upgrad.quora.service.business.QuestionBusinessService;
 import com.upgrad.quora.service.entity.QuestionEntity;
 import com.upgrad.quora.service.exception.AuthorizationFailedException;
@@ -39,31 +36,31 @@ public class QuestionController {
         return new ResponseEntity<QuestionResponse>(questionResponse, HttpStatus.CREATED);
     }
 
-    @RequestMapping("/all/{userId}")
-    public ResponseEntity<List<QuestionResponse>> getAllQuestionsByUser (@PathVariable("userId") final String userId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, UserNotFoundException {
-
+    @RequestMapping(method = RequestMethod.GET, path ="/all/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<QuestionDetailsResponse>> getAllQuestionsByUser (@PathVariable("userId") final String userId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, UserNotFoundException {
 
         List<QuestionEntity> allQuestions = questionBusinessService.getAllQuestionsByUser(userId, authorization);
 
-        List<QuestionResponse> allQuestionResponse = new ArrayList<QuestionResponse>();
+        List<QuestionDetailsResponse> allQuestionDetailsResponse = new ArrayList<QuestionDetailsResponse>();
 
-        for(int i=0;i<allQuestions.size();i++){
-            QuestionResponse qr = new QuestionResponse().id(allQuestions.get(i).getUuid()+allQuestions.get(i).getContent()).status("QUESTION BY USER");
-            allQuestionResponse.add(qr);
+        for (int i = 0; i < allQuestions.size(); i++) {
+            QuestionDetailsResponse questionDetailsResponse = new QuestionDetailsResponse()
+                    .content(allQuestions.get(i).getContent())
+                    .id(allQuestions.get(i).getUuid());
+            allQuestionDetailsResponse.add(questionDetailsResponse);
         }
-        return new ResponseEntity<List<QuestionResponse>>(allQuestionResponse,HttpStatus.FOUND);
+
+        return new ResponseEntity<List<QuestionDetailsResponse>>(allQuestionDetailsResponse, HttpStatus.FOUND);
     }
 
-    @RequestMapping("/question/delete/{questionId}")
-    public ResponseEntity<QuestionResponse> userQuestionDelete (@PathVariable("questionId") final String questionId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, InvalidQuestionException {
-
+    @RequestMapping(method = RequestMethod.DELETE, path = "/question/delete/{questionId}")
+    public ResponseEntity<QuestionDeleteResponse> deleteQuestion (@PathVariable("questionId") final String questionId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, InvalidQuestionException {
 
         questionBusinessService.userQuestionDelete(questionId, authorization);
 
-        QuestionResponse questionResponse = new QuestionResponse().id(questionId).status("QUESTION DELETED");
-        return new ResponseEntity<QuestionResponse>(questionResponse, HttpStatus.NO_CONTENT);
+        QuestionDeleteResponse questionDeleteResponse = new QuestionDeleteResponse().id(questionId).status("QUESTION DELETED");
+        return new ResponseEntity<QuestionDeleteResponse>(questionDeleteResponse, HttpStatus.OK);
     }
-
 
     @RequestMapping(method = RequestMethod.PUT, path = "/question/edit/{questionId}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<QuestionEditResponse> editQuestionContent(final QuestionEditRequest questionEditRequest, @PathVariable("questionId") final String questionId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, InvalidQuestionException {
