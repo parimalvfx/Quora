@@ -30,7 +30,7 @@ public class QuestionDao {
 
     public List<QuestionEntity> getAllQuestionsByUser(final String uuid){
         try {
-            return entityManager.createNamedQuery("getAllQuestionsByUser", QuestionEntity.class).setParameter("uuid", uuid).getResultList();
+            return entityManager.createNamedQuery("questionByUserId", QuestionEntity.class).setParameter("uuid", uuid).getResultList();
         } catch (NoResultException nre) {
             return null;
         }
@@ -38,7 +38,7 @@ public class QuestionDao {
 
     public QuestionEntity getQuestionByUuid(final String uuid) {
         try {
-            return entityManager.createNamedQuery("questionByUserId", QuestionEntity.class).setParameter("uuid",uuid).getSingleResult();
+            return entityManager.createNamedQuery("questionEntityByUuid", QuestionEntity.class).setParameter("uuid",uuid).getSingleResult();
         } catch (NoResultException nre) {
             return null;
         }
