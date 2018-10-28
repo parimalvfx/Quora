@@ -37,6 +37,7 @@ public class UserBusinessService {
         return adminBusinessService.logoutUser(authorizationToken);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public UserEntity getUser(final String userId, final String authorization) throws AuthorizationFailedException, UserNotFoundException {
         UserAuthEntity userAuthEntity = userDao.getUserAuthToken(authorization);
 

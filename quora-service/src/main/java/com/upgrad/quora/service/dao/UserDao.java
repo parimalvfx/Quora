@@ -55,6 +55,7 @@ public class UserDao {
             return null;
         }
     }
+
     /**
      * This method helps find existing user by uuid
      *
@@ -62,22 +63,17 @@ public class UserDao {
      *
      * @return UserEntity object if user with requested uuid exists in database
      */
-    public UserEntity getUserByUuid(final String uid){
-
+    public UserEntity getUserByUuid(final String uuid){
         try{
-            return entityManager.createNamedQuery("userByUuid",UserEntity.class).setParameter("uuid",uid).getSingleResult();
+            return entityManager.createNamedQuery("userByUuid", UserEntity.class).setParameter("uuid", uuid).getSingleResult();
         } catch (NoResultException nre){
             return null;
         }
-
-
     }
 
-
     public UserEntity deleteUser(String uuid) {
-
         try{
-            return entityManager.createNamedQuery("deleteUserByUuid",UserEntity.class).setParameter("uuid",uuid).getSingleResult();
+            return entityManager.createNamedQuery("deleteUserByUuid", UserEntity.class).setParameter("uuid", uuid).getSingleResult();
         } catch (NoResultException nre){
             return null;
         }
@@ -99,7 +95,4 @@ public class UserDao {
             return null;
         }
     }
-
-
-
 }
