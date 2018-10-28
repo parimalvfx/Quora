@@ -20,17 +20,9 @@ public class QuestionDao {
         return questionEntity;
     }
 
-    public QuestionEntity getQuestionByUuid(final String questionUuid) {
+    public UserAuthEntity getUserAuthToken(final String accessToken) {
         try {
-            return entityManager.createNamedQuery("questionEntityByUuid", QuestionEntity.class).setParameter("uuid", questionUuid).getSingleResult();
-        } catch (NoResultException nre) {
-            return null;
-        }
-    }
-
-    public List<QuestionEntity> getAllQuestionsByUser(final String userId) {
-        try {
-            return entityManager.createNamedQuery("questionByUserId", QuestionEntity.class).setParameter("uuid", userId).getResultList();
+            return entityManager.createNamedQuery("userAuthTokenByAccessToken", UserAuthEntity.class).setParameter("accessToken", accessToken).getSingleResult();
         } catch (NoResultException nre) {
             return null;
         }
@@ -39,6 +31,22 @@ public class QuestionDao {
     public QuestionEntity getQuestionById(final long questionId) {
         try {
             return entityManager.createNamedQuery("questionEntityById", QuestionEntity.class).setParameter("uuid", questionId).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
+    public List<QuestionEntity> getAllQuestionsByUser(final String uuid){
+        try {
+            return entityManager.createNamedQuery("getAllQuestionsByUser", QuestionEntity.class).setParameter("uuid", uuid).getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
+    public QuestionEntity getQuestionByUuid(final String uuid) {
+        try {
+            return entityManager.createNamedQuery("questionEntityByUuid", QuestionEntity.class).setParameter("uuid",uuid).getSingleResult();
         } catch (NoResultException nre) {
             return null;
         }
