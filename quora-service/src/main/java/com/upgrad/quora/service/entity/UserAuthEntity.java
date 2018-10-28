@@ -10,7 +10,7 @@ import java.time.ZonedDateTime;
 @Table(name = "user_auth")
 @NamedQueries(
         {
-                @NamedQuery(name = "userAuthTokenByAccessToken", query = "select ut from UserAuthEntity ut where ut.accessToken = :accessToken"),
+                @NamedQuery(name = "userAuthTokenByAccessToken", query = "select uae from UserAuthEntity uae where uae.accessToken = :accessToken"),
         }
 )
 public class UserAuthEntity implements Serializable {

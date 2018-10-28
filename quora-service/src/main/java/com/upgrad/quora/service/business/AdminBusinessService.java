@@ -38,7 +38,7 @@ public class AdminBusinessService {
         // Validate if requested user name is available
         UserEntity existingUser = userDao.getUserByUserName(userEntity.getUserName());
         if (existingUser != null) {
-            throw new SignUpRestrictedException("SGR-001", "Try any other Username, this Username has already been taken.");
+            throw new SignUpRestrictedException("SGR-001", "Try any other Username, this Username has already been taken");
         }
 
         // Validate if provided email id is available
@@ -63,8 +63,9 @@ public class AdminBusinessService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public UserEntity logoutUser(final String authorizationToken) throws SignOutRestrictedException {
-
         UserAuthEntity userAuthEntity = userDao.getUserAuthToken(authorizationToken);
+
+        // Validate if user is signed in or not
         if (userAuthEntity == null) {
             throw new SignOutRestrictedException("SGR-001", "User is not Signed in");
         }
@@ -75,24 +76,30 @@ public class AdminBusinessService {
         return userAuthEntity.getUser();
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public void deleteUser(final String uuid, final String authorizationToken) throws UserNotFoundException, AuthorizationFailedException {
-
         UserAuthEntity userAuthEntity = userDao.getUserAuthToken(authorizationToken);
-        if (userAuthEntity == null) {
-            throw new AuthorizationFailedException("ATHR-001", "'User has not signed in");
 
+        // Validate if user is signed in or not
+        if (userAuthEntity == null) {
+            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
+
+        // Validate if user has signed out
         if (userAuthEntity.getLogoutAt() != null) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out");
         }
-        if(userAuthEntity.getUser().getRole().equals("nonadmin")){
+
+        // Validate if user is admin
+        if (userAuthEntity.getUser().getRole().equals("nonadmin")) {
             throw new AuthorizationFailedException("ATHR-003", "Unauthorized Access, Entered user is not an admin");
         }
-        if (userDao.getUserByUuid(uuid)==null) {
+
+        // Validate if requested user exist or not
+        if (userDao.getUserByUuid(uuid )== null) {
             throw new UserNotFoundException("USR-001", "User with entered uuid to be deleted does not exist");
         }
 
         userDao.deleteUser(uuid);
-
     }
 }

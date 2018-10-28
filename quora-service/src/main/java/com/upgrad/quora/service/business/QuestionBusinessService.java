@@ -27,9 +27,13 @@ public class QuestionBusinessService {
     @Transactional(propagation = Propagation.REQUIRED)
     public QuestionEntity createQuestion(QuestionEntity questionEntity, final String authorizationToken) throws AuthorizationFailedException {
         UserAuthEntity userAuthEntity = userDao.getUserAuthToken(authorizationToken);
+
+        // Validate if user is signed in or not
         if (userAuthEntity == null) {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
+
+        // Validate if user has signed out
         if (userAuthEntity.getLogoutAt() != null) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to post a question");
         }
@@ -39,29 +43,7 @@ public class QuestionBusinessService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<QuestionEntity> getAllQuestionsByUser(final String userId, final String authorizationToken) throws AuthorizationFailedException, UserNotFoundException {
-        UserAuthEntity userAuthEntity = userDao.getUserAuthToken(authorizationToken);
-
-        // Validate if user is signed in or not
-        if (userAuthEntity == null) {
-            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
-        }
-
-        // Validate if user has signed out
-        if (userAuthEntity.getLogoutAt() != null) {
-            throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to get all questions posted by a specific user");
-        }
-
-        // Validate if requested user exist or not
-        if (userDao.getUserByUuid(userId) == null) {
-            throw new UserNotFoundException("USR-001", "User with entered uuid whose question details are to be seen does not exist");
-        }
-
-        return questionDao.getAllQuestionsByUser(userId);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void userQuestionDelete(final String questionId, final String authorization) throws InvalidQuestionException, AuthorizationFailedException {
+    public List<QuestionEntity> getAllQuestions(final String authorization) throws AuthorizationFailedException {
         UserAuthEntity userAuthEntity = userDao.getUserAuthToken(authorization);
 
         // Validate if user is signed in or not
@@ -71,22 +53,10 @@ public class QuestionBusinessService {
 
         // Validate if user has signed out
         if (userAuthEntity.getLogoutAt() != null) {
-            throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to delete a question");
+            throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to get all questions");
         }
 
-        // Validate if requested question exist or not
-        if (questionDao.getQuestionByUuid(questionId) == null) {
-            throw new InvalidQuestionException("QUES-001", "Entered question uuid does not exist");
-        }
-
-        // Validate if current user is the owner of requested question or the role of user is not nonadmin
-        if (!userAuthEntity.getUser().getUuid().equals(questionDao.getQuestionByUuid(questionId).getUser().getUuid())) {
-            if (userAuthEntity.getUser().getRole().equals("nonadmin")) {
-                throw new AuthorizationFailedException("ATHR-003", "Oly the question owner or admin can delete the question");
-            }
-        }
-
-        questionDao.userQuestionDelete(questionId);
+        return questionDao.getAllQuestions();
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -124,7 +94,7 @@ public class QuestionBusinessService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<QuestionEntity> getAllQuestions(final String authorization) throws AuthorizationFailedException {
+    public void userQuestionDelete(final String questionId, final String authorization) throws InvalidQuestionException, AuthorizationFailedException {
         UserAuthEntity userAuthEntity = userDao.getUserAuthToken(authorization);
 
         // Validate if user is signed in or not
@@ -134,9 +104,44 @@ public class QuestionBusinessService {
 
         // Validate if user has signed out
         if (userAuthEntity.getLogoutAt() != null) {
-            throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to get all questions");
+            throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to delete a question");
         }
 
-        return questionDao.getAllQuestions();
+        // Validate if requested question exist or not
+        if (questionDao.getQuestionByUuid(questionId) == null) {
+            throw new InvalidQuestionException("QUES-001", "Entered question uuid does not exist");
+        }
+
+        // Validate if current user is the owner of requested question or the role of user is not nonadmin
+        if (!userAuthEntity.getUser().getUuid().equals(questionDao.getQuestionByUuid(questionId).getUser().getUuid())) {
+            if (userAuthEntity.getUser().getRole().equals("nonadmin")) {
+                throw new AuthorizationFailedException("ATHR-003", "Oly the question owner or admin can delete the question");
+            }
+        }
+
+        questionDao.userQuestionDelete(questionId);
+    }
+
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<QuestionEntity> getAllQuestionsByUser(final String userId, final String authorizationToken) throws AuthorizationFailedException, UserNotFoundException {
+        UserAuthEntity userAuthEntity = userDao.getUserAuthToken(authorizationToken);
+
+        // Validate if user is signed in or not
+        if (userAuthEntity == null) {
+            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
+        }
+
+        // Validate if user has signed out
+        if (userAuthEntity.getLogoutAt() != null) {
+            throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to get all questions posted by a specific user");
+        }
+
+        // Validate if requested user exist or not
+        if (userDao.getUserByUuid(userId) == null) {
+            throw new UserNotFoundException("USR-001", "User with entered uuid whose question details are to be seen does not exist");
+        }
+
+        return questionDao.getAllQuestionsByUser(userId);
     }
 }
