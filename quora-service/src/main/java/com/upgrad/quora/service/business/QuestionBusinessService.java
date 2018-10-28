@@ -6,8 +6,8 @@ import com.upgrad.quora.service.entity.QuestionEntity;
 import com.upgrad.quora.service.entity.UserAuthEntity;
 import com.upgrad.quora.service.entity.UserEntity;
 import com.upgrad.quora.service.exception.AuthorizationFailedException;
-import com.upgrad.quora.service.exception.InvalidQuestionException;
 import com.upgrad.quora.service.exception.UserNotFoundException;
+import com.upgrad.quora.service.exception.InvalidQuestionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -38,20 +38,26 @@ public class QuestionBusinessService {
         return questionDao.createQuestion(questionEntity);
     }
 
-    public List<QuestionEntity> getAllQuestionsByUser(final String uuid, final String authorizationToken) throws AuthorizationFailedException, UserNotFoundException{
-
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<QuestionEntity> getAllQuestionsByUser(final String userId, final String authorizationToken) throws AuthorizationFailedException, UserNotFoundException {
         UserAuthEntity userAuthEntity = userDao.getUserAuthToken(authorizationToken);
+
+        // Validate if user is signed in or not
         if (userAuthEntity == null) {
             throw new AuthorizationFailedException("ATHR-001", "'User has not signed in");
         }
+
+        // Validate if user has signed out
         if (userAuthEntity.getLogoutAt() != null) {
-            throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to post a question");
-        }
-        if (userDao.getUserByUuid(uuid)==null) {
-            throw new UserNotFoundException("USR-001", "User with entered uuid to be deleted does not exist");
+            throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to get all questions posted by a specific user");
         }
 
-        return questionDao.getAllQuestionsByUser(uuid);
+        // Validate if requested user exist or not
+        if (userDao.getUserByUuid(userId) == null) {
+            throw new UserNotFoundException("USR-001", "User with entered uuid whose question details are to be seen does not exist");
+        }
+
+        return questionDao.getAllQuestionsByUser(userId);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
