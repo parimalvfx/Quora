@@ -71,12 +71,9 @@ public class UserDao {
         }
     }
 
-    public UserEntity deleteUser(String uuid) {
-        try{
-            return entityManager.createNamedQuery("deleteUserByUuid", UserEntity.class).setParameter("uuid", uuid).getSingleResult();
-        } catch (NoResultException nre){
-            return null;
-        }
+    public void deleteUser(String uuid) {
+        UserEntity userEntity = getUserByUuid(uuid);
+        entityManager.remove(userEntity);
     }
 
     public UserAuthEntity createAuthToken(final UserAuthEntity userAuthEntity) {

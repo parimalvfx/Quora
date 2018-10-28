@@ -26,6 +26,6 @@ public class AdminController {
 
         // Return response
         UserDeleteResponse deleteResponse = new UserDeleteResponse().id(userId).status("USER SUCCESSFULLY DELETED");
-        return new ResponseEntity<UserDeleteResponse>(deleteResponse, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<UserDeleteResponse>(deleteResponse, HttpStatus.OK);
     }
 }
