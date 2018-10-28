@@ -1,4 +1,4 @@
-/*package com.upgrad.quora.api.controller;
+package com.upgrad.quora.api.controller;
 
 
 import org.junit.Test;
@@ -27,6 +27,8 @@ public class AnswerControllerTest {
     //This test case passes when you try to create the answer but the JWT token entered does not exist in the database.
     @Test
     public void createAnswerWithNonExistingAccessToken() throws Exception {
+        // NOTE: UPDATED URL AS PER UNIT TEST, PROBLEM STATEMENT URL CONTRADICTS WITH UNIT TESTS
+        // ISSUE TICKET - 59944
         mvc.perform(MockMvcRequestBuilders.post("/question/database_question_uuid/answer/create?answer=my_answer").contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).header("authorization", "non_existing_access_token"))
                 .andExpect(status().isForbidden())
                 .andExpect(MockMvcResultMatchers.jsonPath("code").value("ATHR-001"));
@@ -35,6 +37,8 @@ public class AnswerControllerTest {
     //This test case passes when you try to create the answer but the user corresponding to the JWT token entered is signed out of the application.
     @Test
     public void createAnswerWithSignedOutUser() throws Exception {
+        // NOTE: UPDATED URL AS PER UNIT TEST, PROBLEM STATEMENT URL CONTRADICTS WITH UNIT TESTS
+        // ISSUE TICKET - 59944
         mvc.perform(MockMvcRequestBuilders.post("/question/database_question_uuid/answer/create?answer=my_answer").contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).header("authorization", "database_accesstoken3"))
                 .andExpect(status().isForbidden())
                 .andExpect(MockMvcResultMatchers.jsonPath("code").value("ATHR-002"));
@@ -43,6 +47,8 @@ public class AnswerControllerTest {
     //This test case passes when you try to create the answer for the question which does not exist in the database.
     @Test
     public void createAnswerForNonExistingQuestion() throws Exception {
+        // NOTE: UPDATED URL AS PER UNIT TEST, PROBLEM STATEMENT URL CONTRADICTS WITH UNIT TESTS
+        // ISSUE TICKET - 59944
         mvc.perform(MockMvcRequestBuilders.post("/question/non_existing_question_uuid/answer/create?answer=my_answer").contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).header("authorization", "database_accesstoken"))
                 .andExpect(status().isNotFound())
                 .andExpect(MockMvcResultMatchers.jsonPath("code").value("QUES-001"));
@@ -115,6 +121,8 @@ public class AnswerControllerTest {
     //This test case passes when you try to get all the answers posted for a specific question but the JWT token entered does not exist in the database.
     @Test
     public void getAllAnswersToQuestionWithNonExistingAccessToken() throws Exception {
+        // NOTE: UPDATED URL AS PER UNIT TEST, PROBLEM STATEMENT URL CONTRADICTS WITH UNIT TESTS
+        // ISSUE TICKET - 59944
         mvc.perform(MockMvcRequestBuilders.get("/answer/all/database_question_uuid").header("authorization", "non_existing_access_token"))
                 .andExpect(status().isForbidden())
                 .andExpect(MockMvcResultMatchers.jsonPath("code").value("ATHR-001"));
@@ -123,6 +131,8 @@ public class AnswerControllerTest {
     //This test case passes when you try to get all the answers posted for a specific question and the JWT token entered exists in the database but the user corresponding to that JWT token is signed out.
     @Test
     public void getAllAnswersToQuestionWithSignedOutUser() throws Exception {
+        // NOTE: UPDATED URL AS PER UNIT TEST, PROBLEM STATEMENT URL CONTRADICTS WITH UNIT TESTS
+        // ISSUE TICKET - 59944
         mvc.perform(MockMvcRequestBuilders.get("/answer/all/database_question_uuid").header("authorization", "database_accesstoken3"))
                 .andExpect(status().isForbidden())
                 .andExpect(MockMvcResultMatchers.jsonPath("code").value("ATHR-002"));
@@ -131,6 +141,8 @@ public class AnswerControllerTest {
     //This test case passes when you try to get all the answers posted for a specific question which does not exist in the database.
     @Test
     public void getAllAnswersToNonExistingQuestion() throws Exception {
+        // NOTE: UPDATED URL AS PER UNIT TEST, PROBLEM STATEMENT URL CONTRADICTS WITH UNIT TESTS
+        // ISSUE TICKET - 59944
         mvc.perform(MockMvcRequestBuilders.get("/answer/all/non_existing_question_uuid").header("authorization", "database_accesstoken"))
                 .andExpect(status().isNotFound())
                 .andExpect(MockMvcResultMatchers.jsonPath("code").value("QUES-001"));
@@ -138,4 +150,3 @@ public class AnswerControllerTest {
 
 
 }
-*/

@@ -27,7 +27,9 @@ public class AnswerController {
     @Autowired
     private AnswerBusinessService answerBusinessService;
 
-    @RequestMapping(method = RequestMethod.POST, path = "/question/{questionId}answer/create", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    // NOTE: UPDATED URL AS PER UNIT TEST, PROBLEM STATEMENT URL CONTRADICTS WITH UNIT TESTS
+    // ISSUE TICKET - 59944
+    @RequestMapping(method = RequestMethod.POST, path = "/question/{questionId}/answer/create", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<AnswerResponse> createAnswer(final AnswerRequest answerRequest, @PathVariable("questionId") final String questionId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, InvalidQuestionException {
         final AnswerEntity answerEntity = new AnswerEntity();
         answerEntity.setAnswer(answerRequest.getAnswer());
@@ -46,7 +48,9 @@ public class AnswerController {
         return new ResponseEntity<AnswerDeleteResponse>(answerDeleteResponse, HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/all/{questionId}")
+    // NOTE: UPDATED URL AS PER UNIT TEST, PROBLEM STATEMENT URL CONTRADICTS WITH UNIT TESTS
+    // ISSUE TICKET - 59944
+    @RequestMapping(method = RequestMethod.GET, path = "/answer/all/{questionId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<AnswerDetailsResponse>> getAllAnswersToQuestion (@PathVariable("questionId") final String questionId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, InvalidQuestionException {
 
         List<AnswerEntity> allAnswers = answerBusinessService.getAllAnswersToQuestion(questionId, authorization);

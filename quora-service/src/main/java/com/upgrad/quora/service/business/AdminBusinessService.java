@@ -38,13 +38,13 @@ public class AdminBusinessService {
         // Validate if requested user name is available
         UserEntity existingUser = userDao.getUserByUserName(userEntity.getUserName());
         if (existingUser != null) {
-            throw new SignUpRestrictedException("SGR-1", "Try any other Username, this Username has already been taken.");
+            throw new SignUpRestrictedException("SGR-001", "Try any other Username, this Username has already been taken.");
         }
 
         // Validate if provided email id is available
         existingUser = userDao.getUserByEmail(userEntity.getEmail());
         if (existingUser != null) {
-            throw new SignUpRestrictedException("SGR-2", "This user has already been registered, try with any other emailID");
+            throw new SignUpRestrictedException("SGR-002", "This user has already been registered, try with any other emailID");
         }
 
         // Assign default password if password is not provided
