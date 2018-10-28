@@ -44,7 +44,7 @@ public class QuestionBusinessService {
 
         // Validate if user is signed in or not
         if (userAuthEntity == null) {
-            throw new AuthorizationFailedException("ATHR-001", "'User has not signed in");
+            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
 
         // Validate if user has signed out
@@ -121,5 +121,22 @@ public class QuestionBusinessService {
         questionEntity.setDate(existingQuestionEntity.getDate());
 
         return questionDao.editQuestionContent(questionEntity);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<QuestionEntity> getAllQuestions(final String authorization) throws AuthorizationFailedException {
+        UserAuthEntity userAuthEntity = userDao.getUserAuthToken(authorization);
+
+        // Validate if user is signed in or not
+        if (userAuthEntity == null) {
+            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
+        }
+
+        // Validate if user has signed out
+        if (userAuthEntity.getLogoutAt() != null) {
+            throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to get all questions");
+        }
+
+        return questionDao.getAllQuestions();
     }
 }

@@ -60,4 +60,12 @@ public class QuestionDao {
     public QuestionEntity editQuestionContent(final QuestionEntity questionEntity) {
         return entityManager.merge(questionEntity);
     }
+
+    public List<QuestionEntity> getAllQuestions() {
+        try {
+            return entityManager.createNamedQuery("allQuestions", QuestionEntity.class).getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
 }
